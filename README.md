@@ -27,7 +27,7 @@ eval('x-(y+z^2)*3+exp(-x)') // js eval kek
 ```
 
 
-![demo](/images/demo.png?raw=true)
+![demo](/demo.png?raw=true)
 
 ### License (DUP)
 
