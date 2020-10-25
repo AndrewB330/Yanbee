@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Yanbee</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <script src="yanbee.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+</head>
+<body>
+<div id="content">
+    <div class="easter">Yanbee</div>
+    <div class="form__group field">
+        <input type="input" class="form__field" placeholder="Function" name="function" id='function'
+               value="sin(x)*sign(x+2) + cos(0.2*x^2)*2 + sin(exp(0.3*x)+PI) + 3*(1-1)"/>
+        <label for="function" class="form__label">Function</label>
+    </div>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        const ctx = document.getElementById('canvas').getContext('2d');
+        const function_input = document.getElementById('function');
+        Chart.defaults.line.spanGaps = true;
+
+        const chart = new Chart(ctx, {
+            type: 'line', data: {
+                labels: [],
+                datasets: [{
+                    label: '',
+                    data: [],
+                    fill: false,
+                    pointRadius: 0,
+                    borderColor: '#FFF'
+                }]
+            },
+            options: {
+                legend: {
+                    display: false
+                },
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            minRotation: 0,
+
+                            autoSkip: true,
+                            maxTicksLimit: 1
+                        },
+                        gridLines: {
+                            color: "rgba(0, 0, 0, 0)",
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            stepSize: 1,
+
+                            autoSkip: true,
+                            maxTicksLimit: 10
+                        },
+                        gridLines: {
+                            color: "rgba(0, 0, 0, 0)",
+                        }
+                    }]
+                }
+            }
+        });
+
+        function refresh() {
+            const expr = new Expression(function_input.value);
+            const data = [];
+            const labels = [];
+
+            for (let x = -10; x < 10; x += 0.1) {
+                data.push(expr.eval({x}));
+                labels.push(x.toFixed(2));
+            }
+
+            chart.data.labels = labels;
+            chart.data.datasets[0].data = data;
+            chart.update();
+        }
+
+        function_input.addEventListener("keypress", function (event) {
+            // Number 13 is the "Enter" key on the keyboard
+            if (event.keyCode === 13) {
+                try {
+                    function_input.style.color = '#fff';
+                    refresh();
+                } catch (e) {
+                    function_input.style.color = '#e83d26';
+                }
+            }
+        });
+
+        refresh();
+
+    </script>
+
+</div>
+</body>
+</html>
